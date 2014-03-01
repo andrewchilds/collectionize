@@ -1,0 +1,13 @@
+{
+  "name": "collectionize",
+  "version": "0.1.0",
+  "main": "collectionize.js",
+  "license": "MIT",
+  "ignore": [
+    "node_modules",
+    "test"
+  ],
+  "devDependencies": {
+    "lodash": "2.4.1"
+  }
+}
