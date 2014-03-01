@@ -52,18 +52,19 @@
     };
 
     self.add = function (obj) {
-      if (self.onBeforeAdd) {
-        obj = self.onBeforeAdd(obj);
+      if (self.onAdd) {
+        self.onAdd(obj);
       }
-
       self.db[self.db.length] = obj;
+
+      return obj;
     };
 
     self.update = function (obj, key) {
       key = key || 'id';
 
-      if (self.onBeforeAdd) {
-        obj = self.onBeforeAdd(obj);
+      if (self.onAdd) {
+        self.onAdd(obj);
       }
 
       var query = {};
@@ -73,14 +74,18 @@
         query = key;
       }
 
+      var output = [];
       var matches = self.filter(query);
       _.each(matches, function (match) {
         _.extend(match, obj);
+        output[output.length] = match;
       });
 
       if (matches.length === 0) {
-        self.add(obj);
+        output[output.length] = self.add(obj);
       }
+
+      return output;
     };
 
     self.remove = function (query) {
