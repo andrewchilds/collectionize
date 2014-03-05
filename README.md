@@ -116,18 +116,6 @@ Change the order of an object in the collection.
 Things.move(1, 2);
 ```
 
-#### onAdd(fn)
-
-If defined, `onAdd` will decorate the object before adding it to the collection.
-
-```js
-Things.onAdd = function (obj) {
-  obj.hello = true;
-};
-Things.add({ id: 123 });
-// [{ id: 123, hello: true }]
-```
-
 #### remove(query)
 
 Remove all matching elements from the collection.
@@ -161,6 +149,66 @@ Things.update({ color: 'green' }, { color: 'blue' });
 `at`, `each`, `every`, `filter`, `find`, `findIndex`, `findLastIndex`, `first`, `last`, `map`, `max`, `min`, `pluck`, `reduce`, `reduceRight`, `reject`, `sample`, `size`, `shuffle`, `some`, `sortBy`, `where`
 
 Collectionize simply decorates your collection with these methods, meaning instead of `_.filter(Things, query)` you would write `Things.filter(query)`.
+
+### Event Methods
+
+#### on(eventName, fn)
+
+#### off(eventName)
+
+#### trigger(eventName)
+
+### Events
+
+#### beforeAdd
+
+Decorate the object before it's added to the collection.
+
+```js
+Things.on('beforeAdd', function (thing) {
+  thing.initialized = true;
+});
+```
+
+#### added
+
+Do something after an object has been added to the collection, such as save the new object on the server.
+
+```js
+Things.on('added', function (thing) {
+  $.ajax({ url: '/thing', type: 'POST', data: thing });
+});
+```
+
+#### beforeUpdate
+
+Decorate the object before it's updated.
+
+```js
+Things.on('beforeUpdate', function (thing) {
+  thing.initialized = true;
+});
+```
+
+#### update
+
+Do something after an object has been updated, such as save the new object on the server.
+
+```js
+Things.on('added', function (thing) {
+  $.ajax({ url: '/thing/' + thing.id, type: 'PUT', data: thing });
+});
+```
+
+#### deleted
+
+Do something after an object has been deleted from the collection, such as delete the object on the server.
+
+```js
+Things.on('deleted', function (thing) {
+  $.ajax({ url: '/thing/' + thing.id, type: 'DELETE' });
+});
+```
 
 ### Running the Tests
 

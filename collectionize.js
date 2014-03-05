@@ -15,6 +15,7 @@
   function Collectionize(name) {
     var self = {
       db: [],
+      listeners: [],
       name: name // used for localStorage property naming
     };
 
@@ -29,6 +30,26 @@
         return _[fn].apply(this, args);
       };
     });
+
+    self.on = function (eventName, fn) {
+      self.listeners.push({ name: eventName, fn: fn });
+    };
+
+    self.trigger = function () {
+      var args = _.toArray(arguments);
+      var eventName = args.shift();
+      _.each(self.listeners, function (listener) {
+        if (listener.name === eventName) {
+          listener.fn.apply(this, args);
+        }
+      });
+    };
+
+    self.off = function (eventName) {
+      _.remove(self.listeners, function (listener) {
+        return listener.name === eventName;
+      });
+    };
 
     self.isEmpty = function (query) {
       return self.filter(query).length === 0;
@@ -52,20 +73,15 @@
     };
 
     self.add = function (obj) {
-      if (self.onAdd) {
-        self.onAdd(obj);
-      }
+      self.trigger('beforeAdd', obj);
       self.db[self.db.length] = obj;
+      self.trigger('added', obj);
 
       return obj;
     };
 
     self.update = function (obj, key) {
       key = key || 'id';
-
-      if (self.onAdd) {
-        self.onAdd(obj);
-      }
 
       var query = {};
       if (_.isString(key) && obj[key]) {
@@ -76,12 +92,15 @@
 
       var output = [];
       var matches = self.filter(query);
-      _.each(matches, function (match) {
-        _.extend(match, obj);
-        output[output.length] = match;
-      });
 
-      if (matches.length === 0) {
+      if (matches.length > 0) {
+        self.trigger('beforeUpdate', obj);
+        _.each(matches, function (match) {
+          _.extend(match, obj);
+          output[output.length] = match;
+          self.trigger('updated', match);
+        });
+      } else {
         output[output.length] = self.add(obj);
       }
 
@@ -89,7 +108,11 @@
     };
 
     self.remove = function (query) {
+      var removed = self.filter(query);
       self.db = self.reject(query);
+      _.each(removed, function (obj) {
+        self.trigger('deleted', obj);
+      });
     };
 
     self.flush = function (db) {
