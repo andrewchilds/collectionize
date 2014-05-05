@@ -1,7 +1,7 @@
 {
   "name": "collectionize",
   "description": "A lightweight collection management library.",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "repository": "https://github.com/andrewchilds/collectionize.git",
   "author": {
     "name": "Andrew Childs",
