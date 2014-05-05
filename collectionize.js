@@ -119,6 +119,10 @@
       self.db = db || [];
     };
 
+    self.all = function () {
+      return self.db;
+    };
+
     self.clientSave = function () {
       var data = [];
       self.each(function (item, index) {
