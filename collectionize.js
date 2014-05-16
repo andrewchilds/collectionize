@@ -31,8 +31,10 @@
       };
     });
 
-    self.on = function (eventName, fn) {
-      self.listeners.push({ name: eventName, fn: fn });
+    self.on = function (eventNames, fn) {
+      _.each(eventNames.split(' '), function (eventName) {
+        self.listeners.push({ name: eventName, fn: fn });
+      });
     };
 
     self.trigger = function () {

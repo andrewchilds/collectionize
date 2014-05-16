@@ -127,6 +127,21 @@ describe 'Collectionize', ->
             expect(Things.size()).toBe 4
             expect(Things.db).toEqual original
 
+  describe 'we listen to multiple events', ->
+    events = []
+    obj = { id: 1, a: 1, b: 2}
+
+    beforeEach ->
+      Things.on 'added flushed', ->
+        events.push('added or flushed')
+
+    it 'should trigger those events', ->
+      Things.flush([])
+      Things.add(obj)
+      expect(events.length).toBe 2
+      expect(events[0]).toBe 'added or flushed'
+      expect(events[1]).toBe 'added or flushed'
+
   describe 'we listen to add events', ->
     events = []
     obj = { id: 1, a: 1, b: 2}
