@@ -117,6 +117,7 @@
 
     self.flush = function (db) {
       self.db = db || [];
+      self.trigger('flushed');
     };
 
     self.all = function () {
