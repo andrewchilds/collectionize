@@ -160,24 +160,24 @@ describe 'Collectionize', ->
       expect(events[0].name).toBe 'beforeUpdate'
       expect(events[1].name).toBe 'updated'
 
-  describe 'we listen to delete events', ->
+  describe 'we listen to remove events', ->
     events = []
     obj = { id: 1, a: 1, b: 2}
 
     beforeEach ->
       Things.add(obj)
-      Things.on 'deleted', ->
-        events.push({ name: 'deleted', args: arguments })
+      Things.on 'removed', ->
+        events.push({ name: 'removed', args: arguments })
 
     it 'should trigger that event', ->
       Things.remove({ id: 1 })
       Things.remove({ id: 2 })
       expect(events.length).toBe 1
-      expect(events[0].name).toBe 'deleted'
+      expect(events[0].name).toBe 'removed'
 
     describe 'we remove the event listener', ->
       beforeEach ->
-        Things.off('deleted')
+        Things.off('removed')
 
       it 'should not trigger that event', ->
         Things.add(obj)

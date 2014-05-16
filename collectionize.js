@@ -111,7 +111,7 @@
       var removed = self.filter(query);
       self.db = self.reject(query);
       _.each(removed, function (obj) {
-        self.trigger('deleted', obj);
+        self.trigger('removed', obj);
       });
     };
 
