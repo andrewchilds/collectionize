@@ -141,11 +141,11 @@
         });
       });
 
-      window.localStorage.setItem('Collectionize.' + self.name, JSON.stringify(data));
+      window.localStorage.setItem(window.Collectionize.localStoragePrefix + self.name, JSON.stringify(data));
     };
 
     self.clientLoad = function () {
-      var data = window.localStorage.getItem('Collectionize.' + self.name);
+      var data = window.localStorage.getItem(window.Collectionize.localStoragePrefix + self.name);
       try {
         return JSON.parse(data);
       } catch (e) {
@@ -166,5 +166,6 @@
   // Expose
 
   window.Collectionize = Collectionize;
+  window.Collectionize.localStoragePrefix = 'Collectionize.';
 
 }());
