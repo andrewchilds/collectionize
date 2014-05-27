@@ -96,9 +96,9 @@
       var matches = self.filter(query);
 
       if (matches.length > 0) {
-        self.trigger('beforeUpdate', obj);
         _.each(matches, function (match) {
           _.extend(match, obj);
+          self.trigger('beforeUpdate', match);
           output[output.length] = match;
           self.trigger('updated', match);
         });
