@@ -72,6 +72,7 @@
 
     self.move = function (oldIndex, newIndex) {
       self.db = arrayMove(self.db, oldIndex, newIndex);
+      self.trigger('moved');
     };
 
     self.add = function (obj) {
@@ -149,6 +150,7 @@
       try {
         return JSON.parse(data);
       } catch (e) {
+        self.trigger('parseError', data);
         return [];
       }
     };
