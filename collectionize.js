@@ -150,7 +150,7 @@
       try {
         return JSON.parse(data);
       } catch (e) {
-        self.trigger('parseError', data);
+        self.trigger('parseError', data, e);
         return [];
       }
     };
