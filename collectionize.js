@@ -1,5 +1,36 @@
 (function () {
 
+  // http://jsperf.com/jquery-each-vs-for-loop/40
+  function nativeEach(obj, cb) {
+    if (obj && _.isFunction(cb)) {
+      if (_.isPlainObject(obj)) {
+        return eachObject(obj, cb);
+      } else if (_.isArray(obj) || _.isString(obj)) {
+        return eachArray(obj, cb);
+      }
+    }
+  }
+
+  function eachArray(obj, cb) {
+    var i = 0, max = obj.length;
+    for (; i < max; i++) {
+      if (cb(obj[i], i, obj) === false) {
+        break;
+      }
+    }
+  }
+
+  function eachObject(obj, cb) {
+    var key;
+    for (key in obj) {
+      if (obj.hasOwnProperty(key)) {
+        if (cb(obj[key], key, obj) === false) {
+          break;
+        }
+      }
+    }
+  }
+
   function arrayMove(arr, oldIndex, newIndex) {
     if (newIndex >= arr.length) {
       var k = newIndex - arr.length;
@@ -19,20 +50,20 @@
       name: name // used for localStorage property naming
     };
 
-    var lodashMethods = ['at', 'each', 'every', 'filter', 'find', 'findIndex',
+    var lodashMethods = ['at', 'every', 'filter', 'find', 'findIndex',
       'findLastIndex', 'first', 'last', 'map', 'max', 'min', 'pluck', 'reduce',
       'reduceRight', 'reject', 'sample', 'size', 'shuffle', 'some', 'sortBy', 'where'];
 
-    _.each(lodashMethods, function (fn) {
-      self[fn] = function () {
+    nativeEach(lodashMethods, function (methodName) {
+      self[methodName] = function () {
         var args = _.toArray(arguments);
         args.unshift(self.db);
-        return _[fn].apply(this, args);
+        return _[methodName].apply(this, args);
       };
     });
 
     self.on = function (eventNames, fn) {
-      _.each(eventNames.split(' '), function (eventName) {
+      nativeEach(eventNames.split(' '), function (eventName) {
         self.listeners.push({ name: eventName, fn: fn });
       });
     };
@@ -40,7 +71,7 @@
     self.trigger = function () {
       var args = _.toArray(arguments);
       var eventName = args.shift();
-      _.each(self.listeners, function (listener) {
+      nativeEach(self.listeners, function (listener) {
         if (listener.name === eventName) {
           listener.fn.apply(this, args);
         }
@@ -53,13 +84,17 @@
       });
     };
 
+    self.each = function (cb) {
+      nativeEach(self.db, cb);
+    };
+
     self.isEmpty = function (query) {
       return self.filter(query).length === 0;
     };
 
     self.incr = function (query, prop) {
       var matches = self.filter(query);
-      _.each(matches, function (obj) {
+      nativeEach(matches, function (obj) {
         if (obj) {
           if (_.isNumber(obj[prop])) {
             obj[prop]++;
@@ -97,7 +132,7 @@
       var matches = self.filter(query);
 
       if (matches.length > 0) {
-        _.each(matches, function (match) {
+        nativeEach(matches, function (match) {
           _.extend(match, obj);
           self.trigger('beforeUpdate', match);
           output[output.length] = match;
@@ -113,7 +148,7 @@
     self.remove = function (query) {
       var removed = self.filter(query);
       self.db = self.reject(query);
-      _.each(removed, function (obj) {
+      nativeEach(removed, function (obj) {
         self.trigger('removed', obj);
       });
     };
@@ -131,7 +166,7 @@
       var data = [];
       self.each(function (item, index) {
         data[index] = {};
-        _.each(item, function (value, key) {
+        nativeEach(item, function (value, key) {
           if (_.isFunction(value)) {
             value = '(' + value + ');';
           }
