@@ -154,6 +154,7 @@
     };
 
     self.flush = function (db) {
+      self.trigger('beforeFlush');
       self.db = db || [];
       self.trigger('flushed');
     };
