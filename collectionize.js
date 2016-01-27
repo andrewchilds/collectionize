@@ -1,5 +1,21 @@
 (function () {
 
+  var isBrowser = typeof window !== 'undefined';
+  var isNode = typeof module !== 'undefined' && module.exports;
+
+  function safeRequire(varName, moduleName) {
+    if (isBrowser && window[varName]) {
+      return window[varName];
+    } else if (isNode && typeof require === 'function') {
+      return require(moduleName);
+    } else {
+      throw new Error('Collectionize requires ' + moduleName + ' to be loaded.');
+    }
+  }
+
+  var mockStorage = {};
+  var _ = safeRequire('_', 'lodash');
+
   // http://jsperf.com/jquery-each-vs-for-loop/40
   function nativeEach(obj, cb) {
     if (obj && _.isFunction(cb)) {
@@ -41,6 +57,26 @@
     arr.splice(newIndex, 0, arr.splice(oldIndex, 1)[0]);
 
     return arr;
+  }
+
+  function storageSet(name, data) {
+    name = Collectionize.localStoragePrefix + name;
+
+    if (isBrowser) {
+      window.localStorage.setItem(name, data);
+    } else {
+      mockStorage[name] = data;
+    }
+  }
+
+  function storageGet(name) {
+    name = Collectionize.localStoragePrefix + name;
+
+    if (isBrowser) {
+      return window.localStorage.getItem(name, data);
+    } else {
+      return mockStorage[name];
+    }
   }
 
   function Collectionize(name) {
@@ -178,11 +214,12 @@
         });
       });
 
-      window.localStorage.setItem(window.Collectionize.localStoragePrefix + self.name, JSON.stringify(data));
+      storageSet(self.name, JSON.stringify(data));
     };
 
     self.clientLoad = function () {
-      var data = window.localStorage.getItem(window.Collectionize.localStoragePrefix + self.name);
+      var data = storageGet(self.name);
+
       try {
         return JSON.parse(data);
       } catch (e) {
@@ -201,9 +238,16 @@
     return self;
   }
 
+  Collectionize.localStoragePrefix = 'Collectionize.';
+
   // Expose
 
-  window.Collectionize = Collectionize;
-  window.Collectionize.localStoragePrefix = 'Collectionize.';
+  if (isBrowser) {
+    window.Collectionize = Collectionize;
+  }
+
+  if (isNode) {
+    module.exports = Collectionize;
+  }
 
 }());

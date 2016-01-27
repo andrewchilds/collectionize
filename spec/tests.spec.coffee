@@ -1,3 +1,6 @@
+_ = require('lodash')
+Collectionize = require('../collectionize.js')
+
 describe 'Collectionize', ->
   Things = Collectionize('Color')
 

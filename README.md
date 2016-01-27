@@ -2,9 +2,9 @@
 
 ![Build Status](https://travis-ci.org/andrewchilds/collectionize.png?branch=master)
 
-A lightweight collection management library. Requires Lodash.
+A lightweight JS model/collection management library, built on top of Lodash.
 
-### Install
+### Installation
 
 ```js
 bower install collectionize
@@ -14,7 +14,7 @@ bower install collectionize
 npm install collectionize
 ```
 
-### Usage
+### Example Usage
 
 ```js
 var Things = Collectionize('things');
@@ -212,17 +212,11 @@ Things.on('deleted', function (thing) {
 
 ### Running the Tests
 
-First install bower and npm dependencies:
-
 ```sh
 npm install
-bower install
-```
-
-```sh
 npm test
 ```
 
 ### License
 
-MIT. Copyright &copy; 2014 Andrew Childs.
+MIT. Copyright &copy; 2016 Andrew Childs.
