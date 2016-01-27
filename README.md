@@ -69,10 +69,9 @@ Things.flush()
 Things.db = Things.clientLoad()
 ```
 
-#### flush()
-#### flush(newCollection)
+#### flush(), flush(newCollection)
 
-Flush out or replace the collection.
+Flush out and optionally replace the collection.
 
 ```js
 Things.flush()
@@ -152,15 +151,15 @@ Collectionize simply decorates your collection with these methods, meaning inste
 
 ### Event Methods
 
-#### on(eventName, fn)
+#### `on(eventName, fn)`
 
-#### off(eventName)
+#### `off(eventName)`
 
-#### trigger(eventName)
+#### `trigger(eventName)`
 
 ### Events
 
-#### beforeAdd
+#### `beforeAdd`
 
 Decorate the object before it's added to the collection.
 
@@ -170,7 +169,7 @@ Things.on('beforeAdd', function (thing) {
 });
 ```
 
-#### added
+#### `added`
 
 Do something after an object has been added to the collection, such as save the new object on the server.
 
@@ -180,7 +179,7 @@ Things.on('added', function (thing) {
 });
 ```
 
-#### beforeUpdate
+#### `beforeUpdate`
 
 Decorate the object before it's updated.
 
@@ -190,17 +189,17 @@ Things.on('beforeUpdate', function (thing) {
 });
 ```
 
-#### update
+#### `updated`
 
 Do something after an object has been updated, such as save the new object on the server.
 
 ```js
-Things.on('added', function (thing) {
+Things.on('updated', function (thing) {
   $.ajax({ url: '/thing/' + thing.id, type: 'PUT', data: thing });
 });
 ```
 
-#### deleted
+#### `deleted`
 
 Do something after an object has been deleted from the collection, such as delete the object on the server.
 
