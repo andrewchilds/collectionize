@@ -73,7 +73,7 @@
     name = Collectionize.localStoragePrefix + name;
 
     if (isBrowser) {
-      return window.localStorage.getItem(name, data);
+      return window.localStorage.getItem(name);
     } else {
       return mockStorage[name];
     }
