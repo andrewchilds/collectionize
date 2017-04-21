@@ -1,5 +1,12 @@
 (function () {
 
+  var LODASH_METHODS = [
+    'at', 'every', 'filter', 'find', 'findIndex',
+    'findLastIndex', 'first', 'last', 'map', 'max', 'min',
+    'pluck', 'reduce', 'reduceRight', 'reject', 'sample',
+    'size', 'shuffle', 'some', 'sortBy', 'where'
+  ];
+
   var isBrowser = typeof window !== 'undefined';
   var isNode = typeof module !== 'undefined' && module.exports;
 
@@ -86,11 +93,7 @@
     self.listeners = [];
     self.name = name; // Used for localStorage property naming.
 
-    var lodashMethods = ['at', 'every', 'filter', 'find', 'findIndex',
-      'findLastIndex', 'first', 'last', 'map', 'max', 'min', 'pluck', 'reduce',
-      'reduceRight', 'reject', 'sample', 'size', 'shuffle', 'some', 'sortBy', 'where'];
-
-    nativeEach(lodashMethods, function (methodName) {
+    nativeEach(LODASH_METHODS, function (methodName) {
       self[methodName] = function () {
         var args = _.toArray(arguments);
         args.unshift(self.db);
