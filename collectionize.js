@@ -79,12 +79,12 @@
     }
   }
 
-  function Collectionize(name) {
-    var self = {
-      db: [],
-      listeners: [],
-      name: name // used for localStorage property naming
-    };
+  function Collectionize(name, self) {
+    self = self || {};
+
+    self.db = [];
+    self.listeners = [];
+    self.name = name; // Used for localStorage property naming.
 
     var lodashMethods = ['at', 'every', 'filter', 'find', 'findIndex',
       'findLastIndex', 'first', 'last', 'map', 'max', 'min', 'pluck', 'reduce',
