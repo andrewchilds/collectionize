@@ -199,12 +199,12 @@ Things.on('updated', function (thing) {
 });
 ```
 
-#### `deleted`
+#### `removed`
 
-Do something after an object has been deleted from the collection, such as delete the object on the server.
+Do something after an object has been removed from the collection.
 
 ```js
-Things.on('deleted', function (thing) {
+Things.on('removed', function (thing) {
   $.ajax({ url: '/thing/' + thing.id, type: 'DELETE' });
 });
 ```
