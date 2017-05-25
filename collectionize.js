@@ -61,9 +61,8 @@
         arr.push(undefined);
       }
     }
-    arr.splice(newIndex, 0, arr.splice(oldIndex, 1)[0]);
 
-    return arr;
+    arr.splice(newIndex, 0, arr.splice(oldIndex, 1)[0]);
   }
 
   function storageSet(name, data) {
@@ -145,7 +144,7 @@
     };
 
     self.move = function (oldIndex, newIndex) {
-      self.db = arrayMove(self.db, oldIndex, newIndex);
+      arrayMove(self.db, oldIndex, newIndex);
       self.trigger('moved');
     };
 
@@ -185,8 +184,7 @@
     };
 
     self.remove = function (query) {
-      var removed = self.filter(query);
-      self.db = self.reject(query);
+      var removed = _.remove(self.db, query);
       nativeEach(removed, function (obj) {
         self.trigger('removed', obj);
       });
