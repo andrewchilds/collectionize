@@ -81,6 +81,15 @@ Things.flush()
 
 Alias for the Lodash `find` method.
 
+#### getById(id)
+
+Uses an ID-based index to get a single object. This can be faster than `get` for larger collections.
+
+```js
+Things.getById(123);
+// { id: 123, color: 'green', shape: 'triangle' }
+```
+
 #### incr(query, property)
 
 Increments the `property` number or sets it to zero if it doesn't exist.
@@ -141,6 +150,15 @@ Things.update({ id: 2, color: 'red' });
 Things.update({ shape: 'square', color: 'red' }, 'shape');
 // Change all 'blue' colors to 'green'
 Things.update({ color: 'green' }, { color: 'blue' });
+```
+
+#### updateById(obj)
+
+Searches the ID index for a matching object and updates it, otherwise adds it to the collection. This can be faster than `update` for larger collections.
+
+```js
+// Change color to 'red' for object with id '2'
+Things.updateById({ id: 2, color: 'red' });
 ```
 
 ### Lodash Methods

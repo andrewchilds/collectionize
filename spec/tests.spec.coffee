@@ -28,6 +28,9 @@ describe 'Collectionize', ->
     it 'should make those objects searchable by property', ->
       expect(Things.get({ id: 3 }).color).toBe 'red'
 
+    it 'should make those objects searchable by ID index', ->
+      expect(Things.getById(3).color).toBe 'red'
+
     it 'should tell us when a search is empty', ->
       expect(Things.isEmpty({ foo: true })).toBe true
 
@@ -95,6 +98,13 @@ describe 'Collectionize', ->
     describe 'we try to update a single existing object', ->
       beforeEach ->
         Things.update({ id: 2, color: 'yellow' })
+
+      it 'should update the object', ->
+        expect(Things.get({ id: 2 })).toEqual { id: 2, color: 'yellow', shape: 'square' }
+
+    describe 'we try to update (using ID index) a single existing object', ->
+      beforeEach ->
+        Things.updateById({ id: 2, color: 'yellow' })
 
       it 'should update the object', ->
         expect(Things.get({ id: 2 })).toEqual { id: 2, color: 'yellow', shape: 'square' }

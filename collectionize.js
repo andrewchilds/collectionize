@@ -91,6 +91,7 @@
     self.db = [];
     self.listeners = [];
     self.name = name; // Used for localStorage property naming.
+    self.idIndex = [];
 
     nativeEach(LODASH_METHODS, function (methodName) {
       self[methodName] = function () {
@@ -151,6 +152,9 @@
     self.add = function (obj) {
       self.trigger('beforeAdd', obj);
       self.db[self.db.length] = obj;
+      if (obj && obj.id) {
+        self.idIndex[obj.id + ''] = obj;
+      }
       self.trigger('added', obj);
 
       return obj;
@@ -171,10 +175,7 @@
 
       if (matches.length > 0) {
         nativeEach(matches, function (match) {
-          _.extend(match, obj);
-          self.trigger('beforeUpdate', match);
-          output[output.length] = match;
-          self.trigger('updated', match);
+          _update(match, obj, output);
         });
       } else {
         output[output.length] = self.add(obj);
@@ -183,9 +184,41 @@
       return output;
     };
 
+    function _update(match, obj, output) {
+      _.extend(match, obj);
+      self.trigger('beforeUpdate', match);
+      if (output) {
+        output[output.length] = match;
+      }
+      if (obj && obj.id) {
+        self.idIndex[obj.id + ''] = obj;
+      }
+      self.trigger('updated', match);
+    }
+
+    self.getById = function (id) {
+      return self.idIndex[id + ''];
+    };
+
+    self.updateById = function (obj) {
+      if (!obj.id) {
+        return self.update(obj);
+      }
+
+      var existing = self.getById(obj.id);
+      if (existing) {
+        _update(existing, obj);
+      } else {
+        self.add(obj);
+      }
+    };
+
     self.remove = function (query) {
       var removed = _.remove(self.db, query);
       nativeEach(removed, function (obj) {
+        if (obj && obj.id) {
+          self.idIndex[obj.id + ''] = null;
+        }
         self.trigger('removed', obj);
       });
     };
@@ -193,6 +226,7 @@
     self.flush = function (db) {
       self.trigger('beforeFlush');
       self.db = db || [];
+      self.idIndex = [];
       self.trigger('flushed');
     };
 
