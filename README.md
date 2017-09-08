@@ -51,24 +51,6 @@ Things.add({ id: 2, color: 'blue', shape: 'square' });
 // undefined
 ```
 
-#### clientSave()
-
-Save the collection to localStorage. Assumes localStorage exists, meaning there is no bundled polyfill. If the collection includes DOM elements, those are dropped, and functions are converted to strings.
-
-```js
-Things.clientSave()
-```
-
-#### clientLoad()
-
-Load the collection from localStorage. Assumes localStorage exists, meaning there is no bundled polyfill.
-
-```js
-Things.clientSave()
-Things.flush()
-Things.db = Things.clientLoad()
-```
-
 #### flush(), flush(newCollection)
 
 Flush out and optionally replace the collection.
@@ -230,10 +212,10 @@ Things.on('removed', function (thing) {
 ### Running the Tests
 
 ```sh
-npm install
-npm test
+yarn
+yarn test
 ```
 
 ### License
 
-MIT. Copyright &copy; 2016 Andrew Childs.
+MIT. Copyright &copy; 2017 Andrew Childs.

@@ -117,29 +117,6 @@ describe 'Collectionize', ->
         expect(Things.size()).toBe 5
         expect(Things.at(4)[0].id).toBe 9
 
-    describe 'we save to localStorage', ->
-      original = null
-
-      beforeEach ->
-        Things.clientSave()
-        original = Things.db
-
-      describe 'we flush the database', ->
-        beforeEach ->
-          Things.flush()
-
-        it 'should no longer exist', ->
-          expect(Things.size()).toBe 0
-
-        describe 'we load from localStorage', ->
-          beforeEach ->
-            copy = Things.clientLoad()
-            Things.flush(copy)
-
-          it 'should match the old version of itself', ->
-            expect(Things.size()).toBe 4
-            expect(Things.db).toEqual original
-
   describe 'we listen to multiple events', ->
     events = []
     obj = { id: 1, a: 1, b: 2}

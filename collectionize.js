@@ -20,7 +20,6 @@
     }
   }
 
-  var mockStorage = {};
   var _ = safeRequire('_', 'lodash');
 
   // http://jsperf.com/jquery-each-vs-for-loop/40
@@ -63,26 +62,6 @@
     }
 
     arr.splice(newIndex, 0, arr.splice(oldIndex, 1)[0]);
-  }
-
-  function storageSet(name, data) {
-    name = Collectionize.localStoragePrefix + name;
-
-    if (isBrowser) {
-      window.localStorage.setItem(name, data);
-    } else {
-      mockStorage[name] = data;
-    }
-  }
-
-  function storageGet(name) {
-    name = Collectionize.localStoragePrefix + name;
-
-    if (isBrowser) {
-      return window.localStorage.getItem(name);
-    } else {
-      return mockStorage[name];
-    }
   }
 
   function Collectionize(name, self) {
@@ -234,35 +213,6 @@
       return self.db;
     };
 
-    self.clientSave = function () {
-      var data = [];
-      self.each(function (item, index) {
-        data[index] = {};
-        nativeEach(item, function (value, key) {
-          if (_.isFunction(value)) {
-            value = '(' + value + ');';
-          }
-          // Drop DOM elements, since they don't work with JSON.stringify.
-          if (!_.isElement(value)) {
-            data[index][key] = value;
-          }
-        });
-      });
-
-      storageSet(self.name, JSON.stringify(data));
-    };
-
-    self.clientLoad = function () {
-      var data = storageGet(self.name);
-
-      try {
-        return JSON.parse(data);
-      } catch (e) {
-        self.trigger('parseError', data, e);
-        return [];
-      }
-    };
-
     // Aliases
 
     self.get = self.find;
@@ -272,8 +222,6 @@
 
     return self;
   }
-
-  Collectionize.localStoragePrefix = 'Collectionize.';
 
   // Expose
 
