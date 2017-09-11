@@ -70,7 +70,7 @@
     self.db = [];
     self.listeners = [];
     self.name = name; // Used for localStorage property naming.
-    self.idIndex = [];
+    self.idIndex = {};
 
     nativeEach(LODASH_METHODS, function (methodName) {
       self[methodName] = function () {
@@ -169,10 +169,27 @@
       if (output) {
         output[output.length] = match;
       }
+      _addToIndex(obj);
+      self.trigger('updated', match);
+    }
+
+    function _addToIndex(obj) {
       if (obj && obj.id) {
         self.idIndex[obj.id + ''] = obj;
       }
-      self.trigger('updated', match);
+    }
+
+    function _removeFromIndex(obj) {
+      if (obj && obj.id) {
+        self.idIndex[obj.id + ''] = null;
+      }
+    }
+
+    function _resetIndex() {
+      self.idIndex = {};
+      self.each(function (obj) {
+        _addToIndex(obj);
+      });
     }
 
     self.getById = function (id) {
@@ -195,9 +212,7 @@
     self.remove = function (query) {
       var removed = _.remove(self.db, query);
       nativeEach(removed, function (obj) {
-        if (obj && obj.id) {
-          self.idIndex[obj.id + ''] = null;
-        }
+        _removeFromIndex(obj);
         self.trigger('removed', obj);
       });
     };
@@ -205,7 +220,7 @@
     self.flush = function (db) {
       self.trigger('beforeFlush');
       self.db = db || [];
-      self.idIndex = [];
+      _resetIndex();
       self.trigger('flushed');
     };
 
