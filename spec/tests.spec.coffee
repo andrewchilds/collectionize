@@ -15,12 +15,37 @@ describe 'Collectionize', ->
     it 'should return -1', ->
       expect(Things.index({ id: 999 })).toBe -1
 
+  describe 'we update an object by ID', ->
+    beforeEach ->
+      Things.updateById({ id: 2, color: 'blue', shape: 'square' })
+
+    it 'should have stored that object in the DB array', ->
+      expect(Things.size()).toBe 1
+
+    it 'should have stored that object in the index', ->
+      expect(Things.getById(2).color).toBe 'blue'
+
+    describe 'we update an existing object by ID', ->
+      beforeEach ->
+        Things.on 'beforeUpdate', (obj) ->
+          obj.uppercaseColor = obj.color.toUpperCase()
+        Things.updateById({ id: 2, color: 'green', shape: 'square' })
+
+      afterEach ->
+        Things.off('beforeUpdate')
+
+      it 'should have updated the object in the DB array', ->
+        expect(Things.get({ id: 2 }).uppercaseColor).toBe 'GREEN'
+
+      it 'should have updated the object in the DB index', ->
+        expect(Things.getById(2).uppercaseColor).toBe 'GREEN'
+
   describe 'we add some objects', ->
     beforeEach ->
-      Things.add({ id: 2, color: 'blue', shape: 'square' });
-      Things.add({ id: 3, color: 'red', shape: 'circle' });
-      Things.add({ id: 5, color: 'green', shape: 'polygon' });
-      Things.add({ id: 6, color: 'blue', shape: 'triangle' });
+      Things.add({ id: 2, color: 'blue', shape: 'square' })
+      Things.add({ id: 3, color: 'red', shape: 'circle' })
+      Things.add({ id: 5, color: 'green', shape: 'polygon' })
+      Things.add({ id: 6, color: 'blue', shape: 'triangle' })
 
     it 'should have stored those objects in the DB array', ->
       expect(Things.size()).toBe 4
@@ -158,6 +183,10 @@ describe 'Collectionize', ->
         events.push({ name: 'beforeUpdate', args: arguments })
       Things.on 'updated', ->
         events.push({ name: 'updated', args: arguments })
+
+    afterEach ->
+      Things.off 'beforeUpdate'
+      Things.off 'updated'
 
     it 'should trigger those events', ->
       Things.update(obj)

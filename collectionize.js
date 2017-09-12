@@ -167,7 +167,7 @@
       if (output) {
         output[output.length] = match;
       }
-      _addToIndex(obj);
+      _addToIndex(match);
       self.trigger('updated', match);
     }
 
