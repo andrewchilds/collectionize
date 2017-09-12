@@ -131,9 +131,7 @@
     self.add = function (obj) {
       self.trigger('beforeAdd', obj);
       self.db[self.db.length] = obj;
-      if (obj && obj.id) {
-        self.idIndex[obj.id + ''] = obj;
-      }
+      _addToIndex(obj);
       self.trigger('added', obj);
 
       return obj;
@@ -186,7 +184,9 @@
     }
 
     function _resetIndex() {
-      self.idIndex = {};
+      nativeEach(self.idIndex, function (v, k) {
+        self.idIndex[k] = null;
+      });
       self.each(function (obj) {
         _addToIndex(obj);
       });
