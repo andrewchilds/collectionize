@@ -1,17 +1,13 @@
 {
   "name": "collectionize",
   "description": "A lightweight JS model/collection library.",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "repository": "https://github.com/andrewchilds/collectionize.git",
   "author": {
     "name": "Andrew Childs",
     "email": "ac@glomerate.com"
   },
   "license": "MIT",
-  "engines": {
-    "node": "5.x",
-    "npm": "3.x"
-  },
   "scripts": {
     "test": "./node_modules/jasmine-node/bin/jasmine-node --coffee --color --verbose ./spec"
   },
