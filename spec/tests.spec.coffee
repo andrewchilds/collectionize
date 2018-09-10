@@ -91,7 +91,7 @@ describe 'Collectionize', ->
         Things.incr({ color: 'blue' }, 'id')
 
       it 'should increment the property of the matching objects', ->
-        expect(_.pluck(Things.filter({ color: 'blue' }), 'id')).toEqual [3, 7]
+        expect(_.map(Things.filter({ color: 'blue' }), 'id')).toEqual [3, 7]
 
     describe 'we try to increment a non-existing property', ->
       beforeEach ->
