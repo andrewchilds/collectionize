@@ -80,6 +80,8 @@
       };
     });
 
+    self.first = self.head;
+
     self.on = function (eventNames, fn) {
       nativeEach(eventNames.split(' '), function (eventName) {
         self.listeners.push({ name: eventName, fn: fn });
