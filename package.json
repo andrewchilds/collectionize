@@ -30,6 +30,7 @@
     }
   },
   "devDependencies": {
+    "jshint": "^2.9.6",
     "jasmine-node": "^1.16.2"
   },
   "dependencies": {
