@@ -9,13 +9,28 @@
   },
   "license": "MIT",
   "scripts": {
-    "test": "./node_modules/jasmine-node/bin/jasmine-node --coffee --color --verbose ./spec"
+    "test": "yarn lint && ./node_modules/jasmine-node/bin/jasmine-node --coffee --color --verbose ./spec",
+    "lint": "./node_modules/jshint/bin/jshint --verbose *.js"
+  },
+  "jshintConfig": {
+    "browser": true,
+    "curly": true,
+    "eqeqeq": true,
+    "evil": true,
+    "forin": true,
+    "indent": 2,
+    "jquery": true,
+    "node": true,
+    "quotmark": "single",
+    "undef": true,
+    "unused": false,
+    "trailing": true,
+    "globals": {
+      "_": true
+    }
   },
   "devDependencies": {
-    "jasmine-node": "^1.16.2",
-    "grunt": "^1.0.3",
-    "grunt-contrib-jshint": "^1.1.0",
-    "grunt-contrib-watch": "^1.1.0"
+    "jasmine-node": "^1.16.2"
   },
   "dependencies": {
     "lodash": "~4.17.10"
