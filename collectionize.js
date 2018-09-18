@@ -2,9 +2,9 @@
 
   var LODASH_METHODS = [
     'at', 'every', 'filter', 'find', 'findIndex',
-    'findLastIndex', 'first', 'last', 'map', 'max', 'min',
-    'pluck', 'reduce', 'reduceRight', 'reject', 'sample',
-    'size', 'shuffle', 'some', 'sortBy', 'where'
+    'findLastIndex', 'head', 'last', 'map', 'max', 'min',
+    'maxBy', 'minBy', 'reduce', 'reduceRight', 'reject',
+    'sample', 'size', 'shuffle', 'some', 'sortBy'
   ];
 
   var isBrowser = typeof window !== 'undefined';
@@ -79,6 +79,8 @@
         return _[methodName].apply(this, args);
       };
     });
+
+    self.first = self.head;
 
     self.on = function (eventNames, fn) {
       nativeEach(eventNames.split(' '), function (eventName) {
