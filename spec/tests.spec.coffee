@@ -173,6 +173,25 @@ describe 'Collectionize', ->
       expect(events[0].name).toBe 'beforeAdd'
       expect(events[1].name).toBe 'added'
 
+  describe 'we listen to namespaced events', ->
+    events = 0
+    uniqueId = Things.uniqueOn 'foo', ->
+      events += 1
+    beforeEach ->
+      events = 0
+
+    it 'should call those listeners when the right event with the right namespace is triggered', ->
+      Things.trigger('foo.' + uniqueId);
+      expect(events).toEqual 1
+
+    it 'should call those listeners when the right event with no namespace is triggered', ->
+      Things.trigger('foo');
+      expect(events).toEqual 1
+
+    it 'should not call those listeners when the right event with the wrong namespace is triggered', ->
+      Things.trigger('foo.bar');
+      expect(events).toEqual 0 
+
   describe 'we listen to update events', ->
     events = []
     obj = { id: 1, a: 1, b: 2}

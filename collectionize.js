@@ -88,11 +88,22 @@
       });
     };
 
+    self.uniqueOn = function (eventNames, fn) {
+      var namespace = _.uniqueId();
+      var namespacedEventNames = eventNames.split(' ').map(function (eventName) {
+        return eventName + '.' + namespace;
+      }).join(' ');
+
+      self.on(namespacedEventNames, fn);
+
+      return namespace;
+    };
+
     self.trigger = function () {
       var args = _.toArray(arguments);
       var eventName = args.shift();
       nativeEach(self.listeners, function (listener) {
-        if (listener.name === eventName) {
+        if (listener.name === eventName || listener.name.indexOf(eventName + '.') === 0) {
           listener.fn.apply(this, args);
         }
       });
@@ -100,7 +111,7 @@
 
     self.off = function (eventName) {
       _.remove(self.listeners, function (listener) {
-        return listener.name === eventName;
+        return listener.name === eventName || listener.name.indexOf(eventName + '.') === 0;
       });
     };
 
