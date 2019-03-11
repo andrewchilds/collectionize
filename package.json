@@ -1,7 +1,7 @@
 {
   "name": "collectionize",
   "description": "A lightweight JS model/collection library.",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "repository": "https://github.com/andrewchilds/collectionize.git",
   "author": {
     "name": "Andrew Childs",
