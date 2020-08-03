@@ -7,16 +7,14 @@
     'sample', 'size', 'shuffle', 'some', 'sortBy'
   ];
 
-  var isBrowser = typeof window !== 'undefined';
-  var isNode = typeof module !== 'undefined' && module.exports;
-
+  let windowExport = false;
   function safeRequire(varName, moduleName) {
-    if (isBrowser && window[varName]) {
+    // attempt to find module, either on the window of a browser or by requiring it via node/webpack
+    if (typeof window !== 'undefined' && window[varName]) {
+      windowExport = true;
       return window[varName];
-    } else if (isNode && typeof require === 'function') {
-      return require(moduleName);
     } else {
-      throw new Error('Collectionize requires ' + moduleName + ' to be loaded.');
+      return require(moduleName);
     }
   }
 
@@ -252,12 +250,9 @@
   }
 
   // Expose
-
-  if (isBrowser) {
+  if (windowExport) {
     window.Collectionize = Collectionize;
-  }
-
-  if (isNode) {
+  } else {
     module.exports = Collectionize;
   }
 
