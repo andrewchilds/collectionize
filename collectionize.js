@@ -26,14 +26,16 @@
   function nativeEach(obj, cb) {
     if (obj && _.isFunction(cb)) {
       if (_.isPlainObject(obj)) {
-        return eachObject(obj, cb);
-      } else if (_.isArray(obj) || _.isString(obj)) {
-        return eachArray(obj, cb);
+        eachObject(obj, cb);
+      } else if (_.isArray(obj)) {
+        obj.forEach(cb);
+      } else if (_.isString(obj)) {
+        eachCharacter(obj, cb)
       }
     }
   }
 
-  function eachArray(obj, cb) {
+  function eachCharacter(obj, cb) {
     var i = 0, max = obj.length;
     for (; i < max; i++) {
       if (cb(obj[i], i, obj) === false) {
