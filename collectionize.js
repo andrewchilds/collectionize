@@ -30,7 +30,7 @@
       } else if (_.isArray(obj)) {
         obj.forEach(cb);
       } else if (_.isString(obj)) {
-        eachCharacter(obj, cb)
+        eachCharacter(obj, cb);
       }
     }
   }
